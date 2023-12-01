@@ -25,7 +25,10 @@ func main() {
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
-		m.Broadcast(msg)
+		// Broadcast the message to all sessions except the sender
+		m.BroadcastFilter(msg, func(q *melody.Session) bool {
+			return q != s
+		})
 	})
 
 	r.Run(":8000")
